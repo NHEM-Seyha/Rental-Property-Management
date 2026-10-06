@@ -1,0 +1,67 @@
+services:
+
+  gateway:
+    build:
+      context: ./gateway
+    container_name: rental-gateway
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      JWT_SECRET: rental_property_super_secret_key_2026
+
+      REGISTRATION_SERVICE: http://registration:3001
+      LOGIN_SERVICE: http://login:3002
+      PROPERTY_ROOM_SERVICE: http://property-room:3003
+      RENTAL_PAYMENT_SERVICE: http://rental-payment:3004
+    depends_on:
+      - registration
+      - login
+      - property-room
+      - rental-payment
+    restart: unless-stopped
+
+  registration:
+    build:
+      context: ./registration
+    container_name: rental-registration
+    environment:
+      PORT: 3001
+      MONGO_URI: ${MONGO_URI}
+    expose:
+      - "3001"
+    restart: unless-stopped
+
+  login:
+    build:
+      context: ./login
+    container_name: rental-login
+    environment:
+      PORT: 3002
+      MONGO_URI: ${MONGO_URI}
+      JWT_SECRET: rental_property_super_secret_key_2026
+    expose:
+      - "3002"
+    restart: unless-stopped
+
+  property-room:
+    build:
+      context: ./property-room
+    container_name: rental-property-room
+    environment:
+      PORT: 3003
+      MONGO_URI: ${MONGO_URI}
+    expose:
+      - "3003"
+    restart: unless-stopped
+
+  rental-payment:
+    build:
+      context: ./rental-payment
+    container_name: rental-rental-payment
+    environment:
+      PORT: 3004
+      MONGO_URI: ${MONGO_URI}
+    expose:
+      - "3004"
+    restart: unless-stopped
