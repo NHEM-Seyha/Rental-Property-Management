@@ -24,23 +24,22 @@ router.use(
     target: registrationService,
     changeOrigin: true,
     pathRewrite: {
-      "^/": "/register/"
+      "^/": "/register/register"
     }
   })
 );
 
 // Login
 router.use(
-  "/auth",
+  "/login",
   createProxyMiddleware({
     target: loginService,
     changeOrigin: true,
     pathRewrite: {
-      "^/": "/auth/"
+      "^/": "/auth/login"
     }
   })
 );
-
 // ==========================================
 // PROPERTY ROUTES
 // ==========================================
